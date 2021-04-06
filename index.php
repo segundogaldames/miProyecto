@@ -30,6 +30,7 @@
 </head>
 <body>
     <header>
+        <!-- llamada a naveador del sitio -->
         <?php include('partials/cabecera.php'); ?>
     </header>
     <div class="container">

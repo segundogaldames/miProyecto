@@ -31,6 +31,7 @@
 </head>
 <body>
     <header>
+        <!-- llamada a navegador del sitio -->
         <?php include('partials/cabecera.php'); ?>
     </header>
     <div class="container">
