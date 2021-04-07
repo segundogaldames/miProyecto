@@ -16,7 +16,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#">Contacto</a>
                         </li>
-                        <!-- drowdown de administracion del sistema -->
+                        <!-- dropdown de administracion del sistema -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Administrar
@@ -26,11 +26,11 @@
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="#">Productos</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#">Roles</a></li>
+                                <li><a class="dropdown-item" href="roles.php">Roles</a></li>
                                 <li><a class="dropdown-item" href="#">Usuarios</a></li>
                             </ul>
                         </li>
-                        <!-- fin drowdown -->
+                        <!-- fin dropdown -->
                     </ul>
                     <!-- formulario de busqueda -->
                     <!-- action = indica la direccion donde se envia el formulario. Si accion esta vacio, significa que procesaremos la informacion dentro de la misma pagina -->

@@ -7,6 +7,10 @@
     // $_POST = es un arreglo asociativo que permite recibir y/o enviar varias variables de un formulario
 
     //validar que los datos del formulario vienen via POST
+
+    #llamar al archivo de conexion para usar los datos para registrar roles en la tabla roles
+    require('class/conexion.php');
+
     if (isset($_POST['confirm']) && $_POST['confirm'] == 1) {
         
         //almacena el nombre del rol desde el formulario
@@ -14,6 +18,22 @@
 
         if (!$nombre) {
             $msg = 'Debe ingresar el nombre del rol';
+        }else{
+
+            //generamos una consulta con opciones de sanitizacion de datos
+            $res = $mbd->prepare("INSERT INTO roles VALUES(null,?,now(),now())");
+            //validamos por cada signo de ? el dato que intentamos enviar a la base de datos
+            $res->bindParam(1, $nombre);
+            //se ejecuta la consulta de insercion de datos
+            $res->execute();
+
+            //pregunte si hubo registros ingresados
+            $row = $res->rowCount();
+
+            if ($row) {
+                $msg = 'ok';
+                header('Location: roles.php?m=' . $msg);
+            }
         }
     }
 
@@ -45,7 +65,7 @@
             <?php endif; ?>
 
             <form action="" method="post">
-                <div class="form-group">
+                <div class="form-group mb-3">
                     <label for="nombre">Nombre <span class="text-danger">*</span></label>
                     <input type="text" name="nombre" class="form-control" placeholder="Ingrese nombre del rol">
                 </div>
