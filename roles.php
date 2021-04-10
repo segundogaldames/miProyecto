@@ -31,28 +31,34 @@
         <?php include('partials/cabecera.php'); ?>
     </header>
     <div class="container">
-        <h2 class="text-center mt-3 text-primary">Roles</h2>
-        <!-- generacion de mensaje de exito -->
-        <?php if(isset($_GET['m']) && $_GET['m'] == 'ok'): ?>
-            <p class="alert alert-success">
-                El rol se ha registrado correctamente
-            </p>
-        <?php endif; ?>
+        <div class="col-md-6 offset-md-3">
+            <h2 class="text-center mt-3 text-primary">Roles</h2>
+            <!-- generacion de mensaje de exito -->
+            <?php if(isset($_GET['m']) && $_GET['m'] == 'ok'): ?>
+                <p class="alert alert-success">
+                    El rol se ha registrado correctamente
+                </p>
+            <?php endif; ?>
 
-        <table class="table table-hover">
-            <tr>
-                <th>Código</th>
-                <th>Rol</th>
-            </tr>
-            <?php foreach($roles as $rol): ?>
+            <table class="table table-hover">
                 <tr>
-                    <td> <?php echo $rol['id']; ?> </td>
-                    <td> <?php echo $rol['nombre']; ?> </td>
+                    <th>Código</th>
+                    <th>Rol</th>
                 </tr>
-            <?php endforeach; ?>
-        </table>
+                <?php foreach($roles as $rol): ?>
+                    <tr>
+                        <td> <?php echo $rol['id']; ?> </td>
+                        <td>
+                            <a href="verRol.php"> <?php echo $rol['nombre']; ?>  </a>
+                            
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
 
-        <a href="addRoles.php" class="btn btn-primary">Nuevo Rol</a>
+            <a href="addRoles.php" class="btn btn-primary">Nuevo Rol</a>
+        </div>
+        
     </div>
     
 </body>

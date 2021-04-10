@@ -20,19 +20,30 @@
             $msg = 'Debe ingresar el nombre del rol';
         }else{
 
-            //generamos una consulta con opciones de sanitizacion de datos
-            $res = $mbd->prepare("INSERT INTO roles VALUES(null,?,now(),now())");
-            //validamos por cada signo de ? el dato que intentamos enviar a la base de datos
+            //preguntar si el rol ingresado existe en la tabla roles
+            $res = $mbd->prepare("SELECT id FROM roles WHERE nombre = ?");
             $res->bindParam(1, $nombre);
-            //se ejecuta la consulta de insercion de datos
             $res->execute();
+            $rol = $res->fetch();
 
-            //pregunte si hubo registros ingresados
-            $row = $res->rowCount();
+            if ($rol) {
+                $msg = 'El rol ya existe... intente con otro';
+            }else{
 
-            if ($row) {
-                $msg = 'ok';
-                header('Location: roles.php?m=' . $msg);
+                //generamos una consulta con opciones de sanitizacion de datos
+                $res = $mbd->prepare("INSERT INTO roles VALUES(null,?,now(),now())");
+                //validamos por cada signo de ? el dato que intentamos enviar a la base de datos
+                $res->bindParam(1, $nombre);
+                //se ejecuta la consulta de insercion de datos
+                $res->execute();
+
+                //pregunte si hubo registros ingresados
+                $row = $res->rowCount();
+
+                if ($row) {
+                    $msg = 'ok';
+                    header('Location: roles.php?m=' . $msg);
+                }
             }
         }
     }
