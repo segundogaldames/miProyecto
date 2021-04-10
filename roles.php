@@ -49,7 +49,7 @@
                     <tr>
                         <td> <?php echo $rol['id']; ?> </td>
                         <td>
-                            <a href="verRol.php"> <?php echo $rol['nombre']; ?>  </a>
+                            <a href="verRol.php?id=<?php echo $rol['id']; ?>"> <?php echo $rol['nombre']; ?>  </a>
                             
                         </td>
                     </tr>
