@@ -3,7 +3,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require('class/conexion.php');
+require('../class/conexion.php');
 
 if (isset($_GET['id'])) {
     
@@ -25,10 +25,10 @@ if (isset($_GET['id'])) {
 
         if ($row) {
             $msg = 'ok';
-            header('Location: roles.php?e=' . $msg);
+            header('Location: index.php?e=' . $msg);
         }
     }else{
         $error = 'error';
-        header('Location: roles.php?error=' . $error);   
+        header('Location: index.php?error=' . $error);   
     }
 }
