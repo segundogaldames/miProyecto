@@ -9,7 +9,8 @@
     //validar que los datos del formulario vienen via POST
 
     #llamar al archivo de conexion para usar los datos para registrar roles en la tabla roles
-    require('class/conexion.php');
+    require('../class/conexion.php');
+    require('../class/rutas.php');
 
     if (isset($_POST['confirm']) && $_POST['confirm'] == 1) {
         
@@ -42,7 +43,7 @@
 
                 if ($row) {
                     $msg = 'ok';
-                    header('Location: roles.php?m=' . $msg);
+                    header('Location: index.php?m=' . $msg);
                 }
             }
         }
@@ -63,7 +64,7 @@
 <body>
     <header>
         <!-- llamada a navegador del sitio -->
-        <?php include('partials/cabecera.php'); ?>
+        <?php include('../partials/menu.php'); ?>
     </header>
     <div class="container">
         <div class="col-md-6 offset-md-3">

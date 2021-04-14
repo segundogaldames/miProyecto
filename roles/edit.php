@@ -5,7 +5,8 @@
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
     
-    require('class/conexion.php');
+    require('../class/conexion.php');
+    require('../class/rutas.php');
 
     //validar la existencia de la variable id que viene via GET (url)
     if (isset($_GET['id'])) {
@@ -35,7 +36,7 @@
 
                 if ($row) {
                     $msg = 'ok';
-                    header('Location: verRol.php?id=' . $id . '&m=' . $msg);
+                    header('Location: show.php?id=' . $id . '&m=' . $msg);
                 }
             }
             //print_r($_POST);exit;
@@ -59,7 +60,7 @@
 <body>
     <header>
         <!-- llamada a naveador del sitio -->
-        <?php include('partials/cabecera.php'); ?>
+        <?php include('../partials/menu.php'); ?>
     </header>
     <div class="container">
         <div class="col-md-6 offset-md-3">
@@ -81,7 +82,7 @@
                     <div class="form-group">
                         <input type="hidden" name="confirm" value="1">
                         <button type="submit" class="btn btn-primary">Editar</button>
-                        <a href="verRol.php?id=<?php echo $rol['id']; ?>" class="btn btn-link">Volver</a>
+                        <a href="show.php?id=<?php echo $rol['id']; ?>" class="btn btn-link">Volver</a>
                     </div>
                 </form>
             <?php else: ?>

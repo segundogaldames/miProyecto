@@ -26,7 +26,7 @@
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="#">Productos</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="roles.php">Roles</a></li>
+                                <li><a class="dropdown-item" href="<?php echo BASE_URL . 'roles/' ?>">Roles</a></li>
                                 <li><a class="dropdown-item" href="#">Usuarios</a></li>
                             </ul>
                         </li>

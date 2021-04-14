@@ -4,6 +4,8 @@
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
+
+    require('class/rutas.php');
     // $_POST = es un arreglo asociativo que permite recibir y/o enviar varias variables de un formulario
 
     //validar que los datos del formulario vienen via POST
@@ -31,16 +33,11 @@
 <body>
     <header>
         <!-- llamada a naveador del sitio -->
-        <?php include('partials/cabecera.php'); ?>
+        <?php include('partials/menu.php'); ?>
     </header>
     <div class="container">
         <h1 class="text-center mt-3 text-primary">Título de mi página</h1>
-        <?php if(isset($_GET['m']) && $_GET['m'] == 'ok'): ?>
-            <p class="alert alert-success">
-                El rol se ha registrado correctamente
-            </p>
-        <?php endif; ?>
-        <a href="addRoles.php" class="btn btn-primary">Nuevo Rol</a>
+        
     </div>
     
 </body>

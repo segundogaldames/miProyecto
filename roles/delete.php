@@ -9,6 +9,7 @@ if (isset($_GET['id'])) {
     
     $id = (int) $_GET['id'];
 
+    //consulta a la tabla roles si existe un registro con el id recibido por GET
     $res = $mbd->prepare("SELECT id FROM roles WHERE id = ?");
     $res->bindParam(1, $id);
     $res->execute();
@@ -24,10 +25,10 @@ if (isset($_GET['id'])) {
 
         if ($row) {
             $msg = 'ok';
-            header('Location: roles.php?m=' . $msg);
+            header('Location: roles.php?e=' . $msg);
         }
     }else{
         $error = 'error';
-        header('Location: roles.php?m=' . $error);   
+        header('Location: roles.php?error=' . $error);   
     }
 }

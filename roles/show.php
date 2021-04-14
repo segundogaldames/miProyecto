@@ -5,7 +5,8 @@
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
     
-    require('class/conexion.php');
+    require('../class/conexion.php');
+    require('../class/rutas.php');
 
     //validar la existencia de la variable id que viene via GET (url)
     if (isset($_GET['id'])) {
@@ -35,8 +36,8 @@
 </head>
 <body>
     <header>
-        <!-- llamada a naveador del sitio -->
-        <?php include('partials/cabecera.php'); ?>
+        <!-- llamada a navegador del sitio -->
+        <?php include('../partials/menu.php'); ?>
     </header>
     <div class="container">
         <div class="col-md-6 offset-md-3">
@@ -82,9 +83,9 @@
                     </tr>
                 </table>
                 <p>
-                    <a href="roles.php" class="btn btn-link">Volver</a>
-                    <a href="editRol.php?id=<?php echo $rol['id']; ?>" class="btn btn-primary">Editar</a>
-                    <a href="eliminarRol.php?id=<?php echo $rol['id']; ?>" class="btn btn-warning">Eliminar</a>
+                    <a href="index.php" class="btn btn-link">Volver</a>
+                    <a href="edit.php?id=<?php echo $rol['id']; ?>" class="btn btn-primary">Editar</a>
+                    <a href="delete.php?id=<?php echo $rol['id']; ?>" class="btn btn-warning">Eliminar</a>
                 </p>
             <?php else: ?>
                 

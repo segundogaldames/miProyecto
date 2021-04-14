@@ -5,10 +5,11 @@
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
     
-    require('class/conexion.php');
+    require('../class/conexion.php');
+    require('../class/rutas.php');
 
     //consultar por la lista de roles registrada en la tabla roles
-    $res = $mbd->query("SELECT id, nombre FROM roles ORDER BY nombre");
+    $res = $mbd->query("SELECT id, nombre FROM roles ORDER BY id");
     $roles = $res->fetchall();
 
     //print_r($roles);
@@ -27,16 +28,28 @@
 </head>
 <body>
     <header>
-        <!-- llamada a naveador del sitio -->
-        <?php include('partials/cabecera.php'); ?>
+        <!-- llamada a navegador del sitio -->
+        <?php include('../partials/menu.php'); ?>
     </header>
     <div class="container">
         <div class="col-md-6 offset-md-3">
             <h2 class="text-center mt-3 text-primary">Roles</h2>
-            <!-- generacion de mensaje de exito -->
+            <!-- generacion de mensajes de exito o error -->
             <?php if(isset($_GET['m']) && $_GET['m'] == 'ok'): ?>
                 <p class="alert alert-success">
                     El rol se ha registrado correctamente
+                </p>
+            <?php endif; ?>
+
+            <?php if(isset($_GET['e']) && $_GET['e'] == 'ok'): ?>
+                <p class="alert alert-success">
+                    El rol se ha eliminado correctamente
+                </p>
+            <?php endif; ?>
+
+            <?php if(isset($_GET['error']) && $_GET['error'] == 'error'): ?>
+                <p class="alert alert-danger">
+                    El dato no existe
                 </p>
             <?php endif; ?>
 
@@ -49,14 +62,14 @@
                     <tr>
                         <td> <?php echo $rol['id']; ?> </td>
                         <td>
-                            <a href="verRol.php?id=<?php echo $rol['id']; ?>"> <?php echo $rol['nombre']; ?>  </a>
+                            <a href="show.php?id=<?php echo $rol['id']; ?>"> <?php echo $rol['nombre']; ?>  </a>
                             
                         </td>
                     </tr>
                 <?php endforeach; ?>
             </table>
 
-            <a href="addRoles.php" class="btn btn-primary">Nuevo Rol</a>
+            <a href="<?php echo BASE_ROLES . 'add.php' ?>" class="btn btn-primary">Nuevo Rol</a>
         </div>
         
     </div>
