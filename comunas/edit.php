@@ -27,13 +27,17 @@
         if (isset($_POST['confirm']) && $_POST['confirm'] == 1) {
             
             $nombre = trim(strip_tags($_POST['nombre']));
+            $region = (int) $_POST['region']; //recuperamos y guardamos la region
 
             if (!$nombre) {
-                $msg = 'Ingrese el nombre de la región';
+                $msg = 'Ingrese el nombre de la comuna';
+            }elseif(!$region){
+                $msg = 'Seleccione una región';
             }else{
-                $res = $mbd->prepare("UPDATE regiones SET nombre = ?, updated_at = now() WHERE id = ?");
+                $res = $mbd->prepare("UPDATE comunas SET nombre = ?, region_id = ?, updated_at = now() WHERE id = ?");
                 $res->bindParam(1, $nombre);
-                $res->bindParam(2, $id);
+                $res->bindParam(2, $region);
+                $res->bindParam(3, $id);
                 $res->execute();
 
                 $row = $res->rowCount();
@@ -57,7 +61,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Regiones</title>
+    <title>Comunas</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
 </head>
@@ -69,12 +73,12 @@
     <div class="container">
         <div class="col-md-6 offset-md-3">
             <h2 class="text-center mt-3 text-primary">Editar Comuna</h2>
-            <!-- generacion de mensaje de exito -->
-            <?php if(isset($_GET['m']) && $_GET['m'] == 'ok'): ?>
-                <p class="alert alert-success">
-                    La región se ha registrado correctamente
+            <!-- generacion de mensaje de error -->
+            <?php if(isset($msg)): ?> 
+                <p class="alert alert-danger">
+                    <?php echo $msg; ?>
                 </p>
-            <?php endif; ?>
+            <?php endif; ?>           
 
             <!-- validar que el comuna existe     -->
             <?php if($comuna): ?>

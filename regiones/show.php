@@ -95,6 +95,31 @@
             <?php endif; ?>
            
         </div>
+
+        <!-- area en donde mostraremos las comunas de esta region -->
+        <div class="col-md-6 offset-md-3">
+            <?php
+                //listar las comunas que pertenezcan a esta region
+                $res = $mbd->prepare("SELECT id, nombre FROM comunas WHERE region_id = ? ORDER BY nombre");
+                $res->bindParam(1, $id);
+                $res->execute();
+                $comunas = $res->fetchall();
+            ?>
+            <h4 class="text-center mt-3 text-primary">
+                Comunas de la Región <?php echo $region['nombre']; ?>  
+            </h4>
+            <?php if(isset($comunas) && count($comunas)): ?>
+                <div class="list-group">
+                    <?php foreach($comunas as $comuna): ?>
+                        <a href="../comunas/show.php?id=<?php echo $comuna['id']; ?>" class="list-group-item list-group-item-action">
+                            <?php echo $comuna['nombre']; ?>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
+            <?php else: ?>
+                <p class="text-info">No hay comunas asociadas</p>
+            <?php endif; ?>
+        </div>
         
     </div>
     
