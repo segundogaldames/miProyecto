@@ -12,6 +12,14 @@
     require('../class/conexion.php');
     require('../class/rutas.php');
 
+    //lista de roles
+    $res = $mbd->query("SELECT id, nombre FROM roles ORDER BY nombre");
+    $roles = $res->fetchall();
+
+    //lista de comunas
+    $res = $mbd->query("SELECT id, nombre FROM comunas ORDER BY nombre");
+    $comunas = $res->fetchall();
+
     if (isset($_POST['confirm']) && $_POST['confirm'] == 1) {
         
         //almacena el nombre de la region desde el formulario
@@ -94,8 +102,34 @@
                     <input type="text" name="direccion" class="form-control" placeholder="Ingrese la dirección de la persona">
                 </div>
                 <div class="form-group mb-3">
+                    <label for="comuna">Comuna <span class="text-danger">*</span></label>
+                    <select name="comuna" class="form-control">
+                        <option value="">Seleccione...</option>
+                        <?php foreach($comunas as $comuna): ?>
+                            <option value="<?php echo $comuna['id']; ?>"> 
+                                <?php echo $comuna['nombre']; ?> 
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="form-group mb-3">
                     <label for="fecha">Fecha de nacimiento (opcional)</label>
                     <input type="date" name="fecha_nac" class="form-control" placeholder="Ingrese la fecha de nacimiento de la persona">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="telefono">Telefono (solo números)<span class="text-danger">*</span></label>
+                    <input type="number" name="telefono" class="form-control" placeholder="Ingrese el teléfono de la persona">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="rol">Rol <span class="text-danger">*</span></label>
+                    <select name="rol" class="form-control">
+                        <option value="">Seleccione...</option>
+                        <?php foreach($roles as $rol): ?>
+                            <option value="<?php echo $rol['id']; ?>"> 
+                                <?php echo $rol['nombre']; ?> 
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
                 <div class="form-group">
                     <input type="hidden" name="confirm" value="1">
