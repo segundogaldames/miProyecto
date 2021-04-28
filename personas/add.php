@@ -32,6 +32,8 @@
         $telefono = (int) $_POST['telefono'];
         $rol = (int) $_POST['rol'];
 
+        //print_r($_POST);exit;
+
         if (!$nombre || strlen($nombre) < 5) {
             $msg = 'Ingrese el nombre de la persona';
         }elseif(strlen($rut) < 9){
@@ -47,7 +49,36 @@
         }elseif($rol <= 0){
             $msg = 'Seleccione el rol';
         }else{
-            //procedemos a verificar que el rut del usuario no exista
+            //procedemos a verificar que el rut y el email del usuario no exista
+            $res = $mbd->prepare("SELECT id FROM personas WHERE rut = ? AND email = ?");
+            $res->bindParam(1, $rut);
+            $res->bindParam(2, $email);
+            $res->execute();
+
+            $persona = $res->fetch();
+
+            if ($persona) {
+                $msg = 'La persona ingresada ya existe... intente con otra';
+            }else{
+                //registramos la persona en la tabla personas
+                $res = $mbd->prepare("INSERT INTO personas VALUES(null, ?, ?, ?, ?, ?, ?, ?, ?, now(), now() ) ");
+                $res->bindParam(1, $nombre);
+                $res->bindParam(2, $rut);
+                $res->bindParam(3, $email);
+                $res->bindParam(4, $direccion);
+                $res->bindParam(5, $fecha_nac);
+                $res->bindParam(6, $telefono);
+                $res->bindParam(7, $rol);
+                $res->bindParam(8, $comuna);
+                $res->execute();
+
+                $row = $res->rowCount();
+
+                if ($row) {
+                    $msg = 'ok';
+                    header('Location: index.php?m=' . $msg);
+                }
+            }
         }
 
         /* echo '<pre>';
@@ -133,6 +164,7 @@
                 <div class="form-group">
                     <input type="hidden" name="confirm" value="1">
                     <button type="submit" class="btn btn-primary">Enviar</button>
+                    <a href="index.php" class="btn btn-link">Volver</a>
                 </div>
             </form>
         </div>

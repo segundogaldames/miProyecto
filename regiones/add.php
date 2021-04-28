@@ -84,6 +84,7 @@
                 <div class="form-group">
                     <input type="hidden" name="confirm" value="1">
                     <button type="submit" class="btn btn-primary">Enviar</button>
+                    <a href="index.php" class="btn btn-link">Volver</a>
                 </div>
             </form>
         </div>
