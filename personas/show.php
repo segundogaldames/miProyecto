@@ -110,7 +110,7 @@
                 </table>
                 <p>
                     <a href="edit.php?id=<?php echo $id; ?>" class="btn btn-primary">Editar</a>
-                    <a href="#" class="btn btn-success">Agregar Password</a>
+                    <a href="../usuarios/add.php?id=<?php echo $id; ?>" class="btn btn-success">Agregar Password</a>
                     <a href="index.php" class="btn btn-link">Volver</a>
                 </p>
             <?php else: ?>
