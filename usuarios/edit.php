@@ -4,6 +4,9 @@
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
+
+    //iniciar la creacion de variables de sesion
+    session_start();
     // $_POST = es un arreglo asociativo que permite recibir y/o enviar varias variables de un formulario
 
     //validar que los datos del formulario vienen via POST
@@ -12,50 +15,15 @@
     require('../class/conexion.php');
     require('../class/rutas.php');
 
-    if (isset($_GET['id'])) {
+    if (isset($_POST['confirm']) && $_POST['confirm'] == 1) {
         
-        $id_persona = (int) $_GET['id'];
-
-        //consultamos por el nombre de la persona del id
-        $res = $mbd->prepare("SELECT nombre FROM personas WHERE id = ?");
-        $res->bindParam(1, $id_persona);
-        $res->execute();
-
-        $persona = $res->fetch();
-
-        if (isset($_POST['confirm']) && $_POST['confirm'] == 1) {
         
-            //almacena el nombre del rol desde el formulario
-            $password = trim(strip_tags($_POST['password']));
-            $repassword = trim(strip_tags($_POST['repassword']));
-    
-            if (!$password || strlen($password) < 8) {
-                $msg = 'Ingrese un password de al menos 8 caracteres';
-            }elseif($repassword != $password){
-                $msg = 'El password no coincide... intentelo nuevamente';
-            }else{
-                //encriptar el password
-                $password = sha1($password);
-    
-                //activo = 1; inactivo = 2
-                //registrar el password del usuario
-                $res = $mbd->prepare("INSERT INTO usuarios VALUES(null, ?, 1, ?, now(), now() )");
-                $res->bindParam(1, $password);
-                $res->bindParam(2, $id_persona);
-                $res->execute();
-
-                $row = $res->rowCount();
-
-                if ($row) {
-                    $msg = 'ok';
-                    header('Location: ../personas/show.php?id=' . $id_persona . '&m=' . $msg);
-                }
-            }
+        if (isset($_POST['id'])) {
+            $_SESSION['id_persona'] = (int) $_POST['id'];
         }
+
+        //print_r($_POST);exit;
     }
-
-    
-
 ?>
 <!-- aqui comienza el codigo del cliente -->
 <!DOCTYPE html>
@@ -75,7 +43,7 @@
     </header>
     <div class="container">
         <div class="col-md-6 offset-md-3">
-            <h1 class="text-center mt-3 text-primary">Nuevo Usuario</h1>
+            <h1 class="text-center mt-3 text-primary">Modificar Usuario</h1>
             <!-- mostrar mensaje de error -->
             <?php if(isset($msg)): ?>
                 <p class="alert alert-danger">
@@ -83,8 +51,8 @@
                 </p>
             <?php endif; ?>
 
-            <?php if($persona): ?>
-                <h4>Agregando password a <?php echo $persona['nombre']; ?> </h4>
+            <?php //if($persona): ?>
+                <h4>Modificando password a </h4>
                 <hr>
                 <form action="" method="post">
                     <div class="form-group mb-3">
@@ -98,12 +66,12 @@
                     <div class="form-group">
                         <input type="hidden" name="confirm" value="1">
                         <button type="submit" class="btn btn-primary">Enviar</button>
-                        <a href="../personas/show.php?id=<?php echo $id_persona; ?>" class="btn btn-link">Volver</a>
+                        <a href="../personas/show.php?id=<?php echo $_SESSION['id_persona']; ?>" class="btn btn-link">Volver</a>
                     </div>
                 </form>
-            <?php else: ?>
+            <?php //else: ?>
                 <p class="text-info">El dato no existe</p>
-            <?php endif; ?>
+            <?php //endif; ?>
         </div>
     </div>
     

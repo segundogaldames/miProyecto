@@ -19,6 +19,13 @@
 
         $persona = $res->fetch();
 
+        //consultar si la persona con id tiene un usuario
+        $res = $mbd->prepare("SELECT id FROM usuarios WHERE persona_id = ?");
+        $res->bindParam(1, $id);
+        $res->execute();
+
+        $usuario = $res->fetch();
+
         /* echo '<pre>';
         print_r($persona);exit;
         echo '</pre>'; */
@@ -110,8 +117,20 @@
                 </table>
                 <p>
                     <a href="edit.php?id=<?php echo $id; ?>" class="btn btn-primary">Editar</a>
-                    <a href="../usuarios/add.php?id=<?php echo $id; ?>" class="btn btn-success">Agregar Password</a>
                     <a href="index.php" class="btn btn-link">Volver</a>
+                    <!-- verificar si la persona del id tiene un usuario -->
+                    <?php if($usuario): ?>
+                        <form action="../usuarios/edit.php" method="post">
+                            <input type="hidden" name="confirm" value="1">
+                            <input type="hidden" name="id" value="<?php echo $id; ?>">
+                            <button type="submit" class="btn btn-warning">Modificar Password</button>
+                        </form>
+                    <?php else: ?>
+                        <a href="../usuarios/add.php?id=<?php echo $id; ?>" class="btn btn-success">Agregar Password</a>
+                    <?php endif; ?>
+
+                    
+                    
                 </p>
             <?php else: ?>
                 <p class="text-info">El dato no existe</p>
