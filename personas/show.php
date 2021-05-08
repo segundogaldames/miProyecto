@@ -17,7 +17,7 @@
         $id = (int) $_GET['id'];
 
         //consultar por una persona registrada en la tabla personas filtrada por su id
-        $res = $mbd->prepare("SELECT p.id, p.nombre, p.rut, p.email, p.direccion, p.fecha_nac, p.telefono, p.created_at, p.updated_at, r.nombre as rol, c.nombre as comuna FROM personas as p INNER JOIN roles as r ON p.rol_id = r.id INNER JOIN comunas as c ON p.comuna_id = c.id WHERE p.id = ?");
+        $res = $mbd->prepare("SELECT p.id, p.nombre, p.rut, p.email, p.direccion, p.fecha_nac, p.telefono, p.created_at, p.updated_at, r.nombre as rol, c.nombre as comuna, u.activo FROM personas as p INNER JOIN roles as r ON p.rol_id = r.id INNER JOIN comunas as c ON p.comuna_id = c.id LEFT JOIN usuarios as u ON u.persona_id = p.id WHERE p.id = ?");
         $res->bindParam(1, $id);
         $res->execute();
 
@@ -118,6 +118,17 @@
                                 $updated = new DateTime($persona['updated_at']);
                                 echo $updated->format('d-m-Y H:i:s'); 
                             ?> 
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Estado:</th>
+                        <td>
+                            <?php if($persona['activo'] == 1):  ?>
+                                Activo
+                            <?php else: ?>
+                                No Activo
+                            <?php endif; ?>
+                            <a href="../usuarios/edit.php?id=<?php echo $id; ?>" class="btn btn-link btn-sm">Modificar</a>
                         </td>
                     </tr>
                 </table>
