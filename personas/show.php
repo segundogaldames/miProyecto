@@ -4,6 +4,10 @@
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
+
+    session_start();
+
+    //print_r($_SESSION);exit;
     
     require('../class/conexion.php');
     require('../class/rutas.php');
@@ -56,6 +60,8 @@
                     La persona se ha modificado correctamente
                 </p>
             <?php endif; ?>
+
+            <?php include('../partials/mensajes.php'); ?>
 
             <?php if($persona): ?>
                 <table class="table table-hover">
@@ -120,7 +126,7 @@
                     <a href="index.php" class="btn btn-link">Volver</a>
                     <!-- verificar si la persona del id tiene un usuario -->
                     <?php if($usuario): ?>
-                        <form action="../usuarios/edit.php" method="post">
+                        <form action="../usuarios/editPassword.php" method="post">
                             <input type="hidden" name="confirm" value="1">
                             <input type="hidden" name="id" value="<?php echo $id; ?>">
                             <button type="submit" class="btn btn-warning">Modificar Password</button>
