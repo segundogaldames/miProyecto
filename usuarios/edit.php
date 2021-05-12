@@ -15,15 +15,44 @@
     require('../class/conexion.php');
     require('../class/rutas.php');
 
-    if (isset($_POST['confirm']) && $_POST['confirm'] == 1) {
+    if (isset($_GET['id_persona'])) {
         
-        
-        if (isset($_POST['id'])) {
-            $_SESSION['id_persona'] = (int) $_POST['id'];
+        $id_persona = (int) $_GET['id_persona'];
+
+        //rescatar el usuario y algun dato de la persona
+        $res = $mbd->prepare("SELECT u.id, u.activo, p.nombre as persona FROM usuarios as u INNER JOIN personas as p ON u.persona_id = p.id WHERE u.persona_id = ?");
+        $res->bindParam(1, $id_persona);
+        $res->execute();
+
+        $usuario = $res->fetch();
+
+        if (isset($_POST['confirm']) && $_POST['confirm'] == 1) {
+            
+            $activo = (int) $_POST['activo'];
+
+            if ($activo <= 0) {
+                $msg = 'Seleccione el estado del usuario';
+            }else{
+                //rescatamos el id del usuario
+                $id = $usuario['id'];
+                //actualizar el estado del usuario
+                $res = $mbd->prepare("UPDATE usuarios SET activo = ?, updated_at = now() WHERE id = ? ");
+                $res->bindParam(1, $activo);
+                $res->bindParam(2, $id);
+                $res->execute();
+
+                $row = $res->rowCount();
+
+                if ($row) {
+                    $_SESSION['success'] = 'El estado del usuario se ha modificado correctamente';
+                    header('Location: ../personas/show.php?id=' . $id_persona);
+                }
+            }
         }
 
-        //print_r($_POST);exit;
+        //print_r($usuario);exit;
     }
+    
 ?>
 <!-- aqui comienza el codigo del cliente -->
 <!DOCTYPE html>
@@ -51,27 +80,36 @@
                 </p>
             <?php endif; ?>
 
-            <?php //if($persona): ?>
-                <h4>Modificando password a </h4>
+            <?php if($usuario): ?>
+                <h4>Modificando estado a <?php echo $usuario['persona']; ?> </h4>
                 <hr>
                 <form action="" method="post">
                     <div class="form-group mb-3">
-                        <label for="password">Password <span class="text-danger">*</span></label>
-                        <input type="password" name="password" class="form-control" placeholder="Ingrese el password" oncopy="return false">
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="password">Confirmar Password <span class="text-danger">*</span></label>
-                        <input type="password" name="repassword" class="form-control" placeholder="Confirmar password" onpaste="return false">
+                        <label for="activo">Estado <span class="text-danger">*</span></label>
+                        <select name="activo" class="form-control">
+                            <option value="<?php echo $usuario['activo']; ?>">
+                                <?php if($usuario['activo'] == 1): ?>
+                                    Activo
+                                <?php else: ?>
+                                    Inactivo
+                                <?php endif; ?>
+                            </option>
+
+                            <option value="1">Activar</option>
+                            <option value="2">Desactivar</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <input type="hidden" name="confirm" value="1">
                         <button type="submit" class="btn btn-primary">Enviar</button>
-                        <a href="../personas/show.php?id=<?php echo $_SESSION['id_persona']; ?>" class="btn btn-link">Volver</a>
+                        <a href="../personas/show.php?id=<?php echo $id_persona; ?>" class="btn btn-link">Volver</a>
                     </div>
                 </form>
-            <?php //else: ?>
-                <p class="text-info">El dato no existe</p>
-            <?php //endif; ?>
+            <?php else: ?>
+                <p class="text-info">El usuario no tiene una cuenta registrada...
+                <a href="../personas/show.php?id=<?php echo $id_persona; ?>" class="btn btn-link btn-sm">Volver</a>
+                </p>
+            <?php endif; ?>
         </div>
     </div>
     

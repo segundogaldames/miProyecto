@@ -21,6 +21,15 @@
         if (isset($_POST['id'])) {
             $_SESSION['id_persona'] = (int) $_POST['id'];
         }
+
+        //consulta a la tabla personas por la variable de session de la persona
+        $res = $mbd->prepare("SELECT id, nombre FROM personas WHERE id = ?");
+        $res->bindParam(1, $_SESSION['id_persona']);
+        $res->execute();
+
+        $persona = $res->fetch();
+
+
         //print_r($_SESSION['id_persona']);
 
         //esta validacion se hara efectiva cuando llenemos el formulario de modificacion de password
@@ -82,8 +91,8 @@
                 </p>
             <?php endif; ?>
 
-            <?php //if($persona): ?>
-                <h4>Modificando password a </h4>
+            <?php if($persona): ?>
+                <h4>Modificando password a <?php echo $persona['nombre']; ?> </h4>
                 <hr>
                 <form action="" method="post">
                     <div class="form-group mb-3">
@@ -101,9 +110,9 @@
                         <a href="../personas/show.php?id=<?php echo $_SESSION['id_persona']; ?>" class="btn btn-link">Volver</a>
                     </div>
                 </form>
-            <?php //else: ?>
+            <?php else: ?>
                 <p class="text-info">El dato no existe</p>
-            <?php //endif; ?>
+            <?php endif; ?>
         </div>
     </div>
     

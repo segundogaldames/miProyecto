@@ -128,7 +128,8 @@
                             <?php else: ?>
                                 No Activo
                             <?php endif; ?>
-                            <a href="../usuarios/edit.php?id=<?php echo $id; ?>" class="btn btn-link btn-sm">Modificar</a>
+                            <!-- enviamos el id de la persona en el boton modificar estado -->
+                            <a href="../usuarios/edit.php?id_persona=<?php echo $id; ?>" class="btn btn-link btn-sm">Modificar</a>
                         </td>
                     </tr>
                 </table>
