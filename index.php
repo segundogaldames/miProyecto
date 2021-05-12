@@ -5,6 +5,10 @@
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
 
+    session_start();
+
+    //print_r($_SESSION);exit;
+
     require('class/rutas.php');
     // $_POST = es un arreglo asociativo que permite recibir y/o enviar varias variables de un formulario
 
@@ -36,7 +40,11 @@
         <?php include('partials/menu.php'); ?>
     </header>
     <div class="container">
-        <h1 class="text-center mt-3 text-primary">Título de mi página</h1>
+        <?php if(isset($_SESSION['usuario_id'])): ?>
+            <h4 class="text-center mt-3 text-primary">
+                Bienvenid@ <?php echo $_SESSION['usuario_nombre']; ?>
+            </h4>
+        <?php endif; ?>
         
     </div>
     
