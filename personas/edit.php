@@ -4,6 +4,8 @@
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
+
+    session_start();
     // $_POST = es un arreglo asociativo que permite recibir y/o enviar varias variables de un formulario
 
     //validar que los datos del formulario vienen via POST
@@ -60,35 +62,24 @@
             }elseif($rol <= 0){
                 $msg = 'Seleccione el rol';
             }else{
-                //procedemos a verificar que el rut y el email del usuario no exista
-                $res = $mbd->prepare("SELECT id FROM personas WHERE rut = ? AND email = ?");
-                $res->bindParam(1, $rut);
-                $res->bindParam(2, $email);
+                //modificamos la persona en la tabla personas
+                $res = $mbd->prepare("UPDATE personas SET nombre = ?, rut = ?, email = ?, direccion = ?, fecha_nac = ?, telefono = ?, rol_id = ?, comuna_id = ?, updated_at = now() WHERE id = ? ");
+                $res->bindParam(1, $nombre);
+                $res->bindParam(2, $rut);
+                $res->bindParam(3, $email);
+                $res->bindParam(4, $direccion);
+                $res->bindParam(5, $fecha_nac);
+                $res->bindParam(6, $telefono);
+                $res->bindParam(7, $rol);
+                $res->bindParam(8, $comuna);
+                $res->bindParam(9, $id);
                 $res->execute();
     
-                $persona = $res->fetch();
+                $row = $res->rowCount();
     
-                if ($persona) {
-                    $msg = 'La persona ingresada ya existe... intente con otra';
-                }else{
-                    //registramos la persona en la tabla personas
-                    $res = $mbd->prepare("INSERT INTO personas VALUES(null, ?, ?, ?, ?, ?, ?, ?, ?, now(), now() ) ");
-                    $res->bindParam(1, $nombre);
-                    $res->bindParam(2, $rut);
-                    $res->bindParam(3, $email);
-                    $res->bindParam(4, $direccion);
-                    $res->bindParam(5, $fecha_nac);
-                    $res->bindParam(6, $telefono);
-                    $res->bindParam(7, $rol);
-                    $res->bindParam(8, $comuna);
-                    $res->execute();
-    
-                    $row = $res->rowCount();
-    
-                    if ($row) {
-                        $msg = 'ok';
-                        header('Location: index.php?m=' . $msg);
-                    }
+                if ($row) {
+                    $_SESSION['success'] = 'La persona se ha modificado correctamente';
+                    header('Location: show.php?id=' . $id);
                 }
             }
     
@@ -102,6 +93,8 @@
     
 
 ?>
+<?php if(isset($_SESSION['autenticado']) && $_SESSION['usuario_rol'] == 'Administrador'): ?>
+
 <!-- aqui comienza el codigo del cliente -->
 <!DOCTYPE html>
 <html lang="es">
@@ -120,7 +113,7 @@
     </header>
     <div class="container">
         <div class="col-md-6 offset-md-3">
-            <h1 class="text-center mt-3 text-primary">Nueva Persona</h1>
+            <h1 class="text-center mt-3 text-primary">Editar Persona</h1>
             <!-- mostrar mensaje de error -->
             <?php if(isset($msg)): ?>
                 <p class="alert alert-danger">
@@ -197,3 +190,10 @@
     
 </body>
 </html>
+<?php else: ?>
+    <!-- Acceso Indebido -->
+    <script>
+        alert('Acceso Indebido');
+        window.location ='http://localhost:8888/miProyecto/';
+    </script>
+<?php endif; ?>

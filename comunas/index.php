@@ -4,6 +4,8 @@
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
+
+    session_start();
     
     require('../class/conexion.php');
     require('../class/rutas.php');
@@ -35,23 +37,7 @@
         <div class="col-md-6 offset-md-3">
             <h2 class="text-center mt-3 text-primary">Comunas</h2>
             <!-- generacion de mensajes de exito o error -->
-            <?php if(isset($_GET['m']) && $_GET['m'] == 'ok'): ?>
-                <p class="alert alert-success">
-                    La comuna se ha registrado correctamente
-                </p>
-            <?php endif; ?>
-
-            <?php if(isset($_GET['e']) && $_GET['e'] == 'ok'): ?>
-                <p class="alert alert-success">
-                    La comuna se ha eliminado correctamente
-                </p>
-            <?php endif; ?>
-
-            <?php if(isset($_GET['error']) && $_GET['error'] == 'error'): ?>
-                <p class="alert alert-danger">
-                    El dato no existe
-                </p>
-            <?php endif; ?>
+            <?php include('../partials/mensajes.php'); ?>
 
             <table class="table table-hover">
                 <tr>

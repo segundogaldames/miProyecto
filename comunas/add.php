@@ -5,6 +5,8 @@
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
 
+    session_start();
+
     #llamar al archivo de conexion para usar los datos para registrar roles en la tabla roles
     require('../class/conexion.php');
     require('../class/rutas.php');
@@ -45,8 +47,8 @@
 
                     //print_r($row);exit;
                     if ($row) {
-                        $msg = 'ok';
-                        header('Location: index.php?m=' . $msg); //redireccionando hacia index de comunas 
+                        $_SESSION['success'] = 'La comuna se ha registrado correctamente';
+                        header('Location: index.php'); //redireccionando hacia index de comunas 
                     }
                 }
             }

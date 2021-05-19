@@ -4,6 +4,8 @@
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
+
+    session_start();
     
     require('../class/conexion.php');
     require('../class/rutas.php');
@@ -45,11 +47,7 @@
         <div class="col-md-6 offset-md-3">
             <h2 class="text-center mt-3 text-primary">Comunas</h2>
             <!-- generacion de mensaje de exito -->
-            <?php if(isset($_GET['m']) && $_GET['m'] == 'ok'): ?>
-                <p class="alert alert-success">
-                    La comuna se ha modificado correctamente
-                </p>
-            <?php endif; ?>
+            <?php include('../partials/mensajes.php'); ?>
 
             <!-- validar que la comuna existe     -->
             <?php if($comuna): ?>

@@ -35,6 +35,7 @@
         echo '</pre>'; */
     }
 ?>
+<?php if(isset($_SESSION['autenticado']) && $_SESSION['usuario_rol'] != 'Cliente'): ?>
 <!-- aqui comienza el codigo del cliente -->
 <!DOCTYPE html>
 <html lang="es">
@@ -55,11 +56,6 @@
         <div class="col-md-6 offset-md-3">
             <h2 class="text-center mt-3 text-primary">Personas</h2>
             <!-- generacion de mensajes de exito o error -->
-            <?php if(isset($_GET['m']) && $_GET['m'] == 'ok'): ?>
-                <p class="alert alert-success">
-                    La persona se ha modificado correctamente
-                </p>
-            <?php endif; ?>
 
             <?php include('../partials/mensajes.php'); ?>
 
@@ -128,23 +124,33 @@
                             <?php else: ?>
                                 No Activo
                             <?php endif; ?>
-                            <!-- enviamos el id de la persona en el boton modificar estado -->
-                            <a href="../usuarios/edit.php?id_persona=<?php echo $id; ?>" class="btn btn-link btn-sm">Modificar</a>
+                            
+                            <?php if($_SESSION['usuario_rol'] == 'Administrador'): ?>
+                                <!-- enviamos el id de la persona en el boton modificar estado -->
+                                <a href="../usuarios/edit.php?id_persona=<?php echo $id; ?>" class="btn btn-link btn-sm">Modificar</a>
+                            <?php endif; ?>
                         </td>
                     </tr>
                 </table>
                 <p>
-                    <a href="edit.php?id=<?php echo $id; ?>" class="btn btn-primary">Editar</a>
+                    <?php if($_SESSION['usuario_rol'] == 'Administrador'): ?>
+                        <a href="edit.php?id=<?php echo $id; ?>" class="btn btn-primary">Editar</a>
+                    <?php endif; ?>
+
                     <a href="index.php" class="btn btn-link">Volver</a>
                     <!-- verificar si la persona del id tiene un usuario -->
                     <?php if($usuario): ?>
-                        <form action="../usuarios/editPassword.php" method="post">
-                            <input type="hidden" name="confirm" value="1">
-                            <input type="hidden" name="id" value="<?php echo $id; ?>">
-                            <button type="submit" class="btn btn-warning">Modificar Password</button>
-                        </form>
+                        <?php if($_SESSION['usuario_rol'] == 'Administrador' || ($_SESSION['usuario_nombre'] == $persona['nombre'])): ?>
+                            <form action="../usuarios/editPassword.php" method="post">
+                                <input type="hidden" name="confirm" value="1">
+                                <input type="hidden" name="id" value="<?php echo $id; ?>">
+                                <button type="submit" class="btn btn-warning">Modificar Password</button>
+                            </form>
+                        <?php endif; ?>
                     <?php else: ?>
-                        <a href="../usuarios/add.php?id=<?php echo $id; ?>" class="btn btn-success">Agregar Password</a>
+                        <?php if($_SESSION['usuario_rol'] == 'Administrador'): ?>
+                            <a href="../usuarios/add.php?id=<?php echo $id; ?>" class="btn btn-success">Agregar Password</a>
+                        <?php endif; ?>
                     <?php endif; ?>
 
                     
@@ -160,3 +166,10 @@
     
 </body>
 </html>
+<?php else: ?>
+    <!-- Acceso Indebido -->
+    <script>
+        alert('Acceso Indebido');
+        window.location ='http://localhost:8888/miProyecto/';
+    </script>
+<?php endif; ?>

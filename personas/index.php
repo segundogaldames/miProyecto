@@ -8,6 +8,8 @@
     require('../class/conexion.php');
     require('../class/rutas.php');
 
+    session_start();
+
     //consultar por la lista de personas registrada en la tabla personas
     $res = $mbd->query("SELECT p.id, p.nombre, p.rut, p.email, r.nombre as rol, c.nombre as comuna FROM personas as p INNER JOIN roles as r ON p.rol_id = r.id INNER JOIN comunas as c ON p.comuna_id = c.id");
     $personas = $res->fetchall();
@@ -15,8 +17,11 @@
     /* echo '<pre>';
     print_r($personas);exit;
     echo '</pre>'; */
-
 ?>
+
+<!-- validamos que el usuario este autenticado y su rol sea Administrador -->
+<?php if(isset($_SESSION['autenticado']) && $_SESSION['usuario_rol'] != 'Cliente'): ?>
+
 <!-- aqui comienza el codigo del cliente -->
 <!DOCTYPE html>
 <html lang="es">
@@ -37,23 +42,7 @@
         <div class="col-md-10 offset-md-1">
             <h2 class="text-center mt-3 text-primary">Personas</h2>
             <!-- generacion de mensajes de exito o error -->
-            <?php if(isset($_GET['m']) && $_GET['m'] == 'ok'): ?>
-                <p class="alert alert-success">
-                    La persona se ha registrado correctamente
-                </p>
-            <?php endif; ?>
-
-            <?php if(isset($_GET['e']) && $_GET['e'] == 'ok'): ?>
-                <p class="alert alert-success">
-                    La persona se ha eliminado correctamente
-                </p>
-            <?php endif; ?>
-
-            <?php if(isset($_GET['error']) && $_GET['error'] == 'error'): ?>
-                <p class="alert alert-danger">
-                    El dato no existe
-                </p>
-            <?php endif; ?>
+            <?php include('../partials/mensajes.php'); ?>
 
             <table class="table table-hover">
                 <tr>
@@ -77,11 +66,19 @@
                     </tr>
                 <?php endforeach; ?>
             </table>
-
-            <a href="add.php" class="btn btn-primary">Nueva Persona</a>
+            <?php if($_SESSION['usuario_rol'] == 'Administrador'): ?> 
+                <a href="add.php" class="btn btn-primary">Nueva Persona</a>
+            <?php endif; ?> 
         </div>
         
     </div>
     
 </body>
 </html>
+<?php else: ?>
+    <!-- Acceso Indebido -->
+    <script>
+        alert('Acceso Indebido');
+        window.location ='http://localhost:8888/miProyecto/';
+    </script>
+<?php endif; ?>

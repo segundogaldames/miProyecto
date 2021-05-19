@@ -52,6 +52,8 @@
     }
 
 ?>
+
+<?php if(!isset($_SESSION['autenticado'])): ?>
 <!-- aqui comienza el codigo del cliente -->
 <!DOCTYPE html>
 <html lang="es">
@@ -98,3 +100,10 @@
     
 </body>
 </html>
+<?php else: ?>
+    <!-- Acceso Indebido -->
+    <script>
+        alert('Debe cerrar sesion para continuar');
+        window.location = "<?php echo BASE_URL; ?>";
+    </script>
+<?php endif; ?>

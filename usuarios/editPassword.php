@@ -65,6 +65,8 @@
         //print_r($_POST);exit;
     }
 ?>
+
+<?php if($_SESSION['usuario_rol'] == 'Administrador' || ($_SESSION['usuario_nombre'] == $persona['nombre'])): ?>
 <!-- aqui comienza el codigo del cliente -->
 <!DOCTYPE html>
 <html lang="es">
@@ -118,3 +120,10 @@
     
 </body>
 </html>
+<?php else: ?>
+    <!-- Acceso Indebido -->
+    <script>
+        alert('Acceso Indebido');
+        window.location ='http://localhost:8888/miProyecto/';
+    </script>
+<?php endif; ?>

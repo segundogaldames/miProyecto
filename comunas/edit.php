@@ -4,6 +4,8 @@
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
+
+    session_start();
     
     require('../class/conexion.php');
     require('../class/rutas.php');
@@ -43,8 +45,8 @@
                 $row = $res->rowCount();
 
                 if ($row) {
-                    $msg = 'ok';
-                    header('Location: show.php?id=' . $id . '&m=' . $msg);
+                    $_SESSION['success'] = 'La comuna se ha modificado correctmente';
+                    header('Location: show.php?id=' . $id);
                 }
             }
             //print_r($_POST);exit;

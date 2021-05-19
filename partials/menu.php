@@ -17,7 +17,7 @@
                             <a class="nav-link" href="#">Contacto</a>
                         </li>
                         <!-- dropdown de administracion del sistema -->
-                        <?php if(isset($_SESSION['autenticado']) && $_SESSION['usuario_rol'] == 'Administrador'): ?>
+                        <?php if(isset($_SESSION['autenticado']) && $_SESSION['usuario_rol'] != 'Cliente'): ?>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Administrar

@@ -4,6 +4,8 @@
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
+
+    session_start();
     // $_POST = es un arreglo asociativo que permite recibir y/o enviar varias variables de un formulario
 
     //validar que los datos del formulario vienen via POST
@@ -75,8 +77,8 @@
                 $row = $res->rowCount();
 
                 if ($row) {
-                    $msg = 'ok';
-                    header('Location: index.php?m=' . $msg);
+                    $_SESSION['success'] = 'La persona se ha registrado correctamente';
+                    header('Location: index.php');
                 }
             }
         }
@@ -88,6 +90,7 @@
     }
 
 ?>
+<?php if(isset($_SESSION['autenticado']) && $_SESSION['usuario_rol'] == 'Administrador'): ?>
 <!-- aqui comienza el codigo del cliente -->
 <!DOCTYPE html>
 <html lang="es">
@@ -172,3 +175,10 @@
     
 </body>
 </html>
+<?php else: ?>
+    <!-- Acceso Indebido -->
+    <script>
+        alert('Acceso Indebido');
+        window.location ='http://localhost:8888/miProyecto/';
+    </script>
+<?php endif; ?>
