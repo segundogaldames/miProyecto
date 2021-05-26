@@ -6,6 +6,8 @@
     error_reporting(E_ALL);
     // $_POST = es un arreglo asociativo que permite recibir y/o enviar varias variables de un formulario
 
+    session_start();
+
     //validar que los datos del formulario vienen via POST
 
     #llamar al archivo de conexion para usar los datos para registrar roles en la tabla roles
@@ -42,14 +44,15 @@
                 $row = $res->rowCount();
 
                 if ($row) {
-                    $msg = 'ok';
-                    header('Location: index.php?m=' . $msg);
+                    $_SESSION['success'] = 'El rol se ha registrado correctamente';
+                    header('Location: index.php');
                 }
             }
         }
     }
 
 ?>
+<?php if(isset($_SESSION['autenticado']) && $_SESSION['usuario_rol'] == 'Administrador'): ?>
 <!-- aqui comienza el codigo del cliente -->
 <!DOCTYPE html>
 <html lang="es">
@@ -91,3 +94,9 @@
     
 </body>
 </html>
+<?php else: ?>
+    <script>
+        alert('Acceso Indebido');
+        window.location = "<?php echo BASE_URL; ?>";
+    </script>
+<?php endif; ?>

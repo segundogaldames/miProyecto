@@ -4,6 +4,8 @@
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
+
+    session_start();
     
     require('../class/conexion.php');
     require('../class/rutas.php');
@@ -35,8 +37,8 @@
                 $row = $res->rowCount();
 
                 if ($row) {
-                    $msg = 'ok';
-                    header('Location: show.php?id=' . $id . '&m=' . $msg);
+                    $_SESSION['success'] = 'El rol se ha modificado correctamente';
+                    header('Location: show.php?id=' . $id);
                 }
             }
             //print_r($_POST);exit;
@@ -46,6 +48,7 @@
     }
 
 ?>
+<?php if(isset($_SESSION['autenticado']) && $_SESSION['usuario_rol'] == 'Administrador'): ?>
 <!-- aqui comienza el codigo del cliente -->
 <!DOCTYPE html>
 <html lang="es">
@@ -97,3 +100,9 @@
     
 </body>
 </html>
+<?php else: ?>
+    <script>
+        alert('Acceso Indebido');
+        window.location = "<?php echo BASE_URL; ?>";
+    </script>
+<?php endif; ?>

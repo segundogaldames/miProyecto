@@ -5,6 +5,8 @@
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
     
+    session_start();
+
     require('../class/conexion.php');
     require('../class/rutas.php');
 
@@ -15,6 +17,7 @@
     //print_r($roles);
 
 ?>
+<?php if(isset($_SESSION['autenticado']) && $_SESSION['usuario_rol'] == 'Administrador'): ?>
 <!-- aqui comienza el codigo del cliente -->
 <!DOCTYPE html>
 <html lang="es">
@@ -35,23 +38,8 @@
         <div class="col-md-6 offset-md-3">
             <h2 class="text-center mt-3 text-primary">Roles</h2>
             <!-- generacion de mensajes de exito o error -->
-            <?php if(isset($_GET['m']) && $_GET['m'] == 'ok'): ?>
-                <p class="alert alert-success">
-                    El rol se ha registrado correctamente
-                </p>
-            <?php endif; ?>
 
-            <?php if(isset($_GET['e']) && $_GET['e'] == 'ok'): ?>
-                <p class="alert alert-success">
-                    El rol se ha eliminado correctamente
-                </p>
-            <?php endif; ?>
-
-            <?php if(isset($_GET['error']) && $_GET['error'] == 'error'): ?>
-                <p class="alert alert-danger">
-                    El dato no existe
-                </p>
-            <?php endif; ?>
+            <?php include('../partials/mensajes.php'); ?>
 
             <table class="table table-hover">
                 <tr>
@@ -76,3 +64,9 @@
     
 </body>
 </html>
+<?php else: ?>
+    <script>
+        alert('Acceso Indebido');
+        window.location = "<?php echo BASE_URL; ?>";
+    </script>
+<?php endif; ?>
