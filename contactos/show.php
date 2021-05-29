@@ -4,6 +4,8 @@
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
+
+    session_start();
     
     require('../class/conexion.php');
     require('../class/rutas.php');
@@ -13,13 +15,15 @@
         
         $id = (int) $_GET['id']; //parsear la variable id a numero entero
 
-        //preguntamos si existe el id enviado via GET en la tabla regiones
-        $res = $mbd->prepare("SELECT id, nombre, created_at, updated_at FROM regiones WHERE id = ?");
+        //preguntamos si existe el id enviado via GET en la tabla comunas
+        $res = $mbd->prepare("SELECT id, nombre, email, telefono, asunto, mensaje, estado, created_at, updated_at FROM contactos WHERE id = ?");
         $res->bindParam(1, $id);
         $res->execute();
-        $region = $res->fetch();
+        $contacto = $res->fetch();
 
-        //print_r($region);exit;
+       /*  echo '<pre>';
+        print_r($contacto);exit;
+        echo '</pre>'; */
     }
 
 ?>
@@ -30,7 +34,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Regiones</title>
+    <title>Comunas</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
 </head>
@@ -41,32 +45,32 @@
     </header>
     <div class="container">
         <div class="col-md-6 offset-md-3">
-            <h2 class="text-center mt-3 text-primary">Regiones</h2>
+            <h2 class="text-center mt-3 text-primary">Comunas</h2>
             <!-- generacion de mensaje de exito -->
-            <?php if(isset($_GET['m']) && $_GET['m'] == 'ok'): ?>
-                <p class="alert alert-success">
-                    La región se ha modificado correctamente
-                </p>
-            <?php endif; ?>
+            <?php include('../partials/mensajes.php'); ?>
 
-            <!-- validar que la region existe     -->
-            <?php if($region): ?>
+            <!-- validar que la comuna existe     -->
+            <?php if($comuna): ?>
                 
                 <table class="table table-hover">
                     <tr>
                         <th>Id:</th>
-                        <td> <?php echo $region['id']; ?>  </td>
+                        <td> <?php echo $comuna['id']; ?>  </td>
+                    </tr>
+                    <tr>
+                        <th>Comuna:</th>
+                        <td> <?php echo $comuna['comuna']; ?>  </td>
                     </tr>
                     <tr>
                         <th>Región:</th>
-                        <td> <?php echo $region['nombre']; ?>  </td>
+                        <td> <?php echo $comuna['region']; ?>  </td>
                     </tr>
                     <tr>
                         <th>Creado:</th>
                         <td> 
                             <?php 
-                                //transformamos la fecha de la tabla regiones en una fecha valida para php
-                                $fecha = new DateTime($region['created_at']);
+                                //transformamos la fecha de la tabla comunas en una fecha valida para php
+                                $fecha = new DateTime($comuna['created_at']);
                                 echo $fecha->format('d-m-Y H:i:s'); 
                             ?>  
                         </td>
@@ -75,8 +79,8 @@
                         <th>Actualizado:</th>
                         <td> 
                             <?php 
-                                //transformamos la fecha de la tabla regiones en una fecha valida para php
-                                $fecha = new DateTime($region['updated_at']);
+                                //transformamos la fecha de la tabla comunas en una fecha valida para php
+                                $fecha = new DateTime($comuna['updated_at']);
                                 echo $fecha->format('d-m-Y H:i:s'); 
                             ?>  
                         </td>
@@ -84,9 +88,7 @@
                 </table>
                 <p>
                     <a href="index.php" class="btn btn-link">Volver</a>
-                    <a href="edit.php?id=<?php echo $region['id']; ?>" class="btn btn-primary">Editar</a>
-                    <!-- boton que agrega una comuna a partir de una region -->
-                    <a href="../comunas/add.php?id=<?php echo $region['id']; ?>" class="btn btn-primary">Agregar Comuna</a>
+                    <a href="edit.php?id=<?php echo $comuna['id']; ?>" class="btn btn-primary">Editar</a>
                 </p>
             <?php else: ?>
                 
@@ -94,31 +96,6 @@
             
             <?php endif; ?>
            
-        </div>
-
-        <!-- area en donde mostraremos las comunas de esta region -->
-        <div class="col-md-6 offset-md-3">
-            <?php
-                //listar las comunas que pertenezcan a esta region
-                $res = $mbd->prepare("SELECT id, nombre FROM comunas WHERE region_id = ? ORDER BY nombre");
-                $res->bindParam(1, $id);
-                $res->execute();
-                $comunas = $res->fetchall();
-            ?>
-            <h4 class="text-center mt-3 text-primary">
-                Comunas de la Región <?php echo $region['nombre']; ?>  
-            </h4>
-            <?php if(isset($comunas) && count($comunas)): ?>
-                <div class="list-group">
-                    <?php foreach($comunas as $comuna): ?>
-                        <a href="../comunas/show.php?id=<?php echo $comuna['id']; ?>" class="list-group-item list-group-item-action">
-                            <?php echo $comuna['nombre']; ?>
-                        </a>
-                    <?php endforeach; ?>
-                </div>
-            <?php else: ?>
-                <p class="text-info">No hay comunas asociadas</p>
-            <?php endif; ?>
         </div>
         
     </div>

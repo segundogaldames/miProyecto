@@ -40,6 +40,9 @@
         <?php include('partials/menu.php'); ?>
     </header>
     <div class="container">
+
+        <?php include('partials/mensajes.php'); ?>
+
         <?php if(isset($_SESSION['usuario_id'])): ?>
             <h4 class="text-center mt-3 text-primary">
                 Bienvenid@ <?php echo $_SESSION['usuario_nombre']; ?>

@@ -14,7 +14,7 @@
                             <a class="nav-link" href="#">Nosotros</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Contacto</a>
+                            <a class="nav-link" href="<?php echo BASE_URL . 'contactos/add.php' ?>">Contacto</a>
                         </li>
                         <!-- dropdown de administracion del sistema -->
                         <?php if(isset($_SESSION['autenticado']) && $_SESSION['usuario_rol'] != 'Cliente'): ?>
@@ -25,8 +25,10 @@
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <li><a class="dropdown-item" href="#">Clientes</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">Marcas</a></li>
+                                    <li><a class="dropdown-item" href="<?php echo BASE_URL . 'atributos/' ?>">Atributos</a></li>
+                                    <li><a class="dropdown-item" href="<?php echo BASE_URL . 'marcas/' ?>">Marcas</a></li>
                                     <li><a class="dropdown-item" href="#">Productos</a></li>
+                                    <li><a class="dropdown-item" href="<?php echo BASE_URL . 'producto_tipos/' ?>">Producto Tipos</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="<?php echo BASE_URL . 'comunas/' ?>">Comunas</a></li>
                                     <li><a class="dropdown-item" href="<?php echo BASE_URL . 'regiones/' ?>">Regiones</a></li>
